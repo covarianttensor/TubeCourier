@@ -1,5 +1,5 @@
 /**
- * TubeCourier - MeTube Downloader (Chrome / Chromium MV3 Edition)
+ * TubeCourier for MeTube (Chrome / Chromium MV3 Edition)
  * Background Service Worker: Socket.IO client, notifications, cookie syncing, declarativeNetRequest origin rewriting.
  */
 

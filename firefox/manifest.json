@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "TubeCourier - MeTube Downloader",
+  "name": "TubeCourier for MeTube",
   "version": "1.0.0",
   "description": "Companion extension specifically designed for MeTube (yt-dlp). Send video downloads with custom subfolder selection, real-time WebSocket progress tracking, cookie sync, and notifications.",
   "author": "covarianttensor",
@@ -33,7 +33,7 @@
   },
   "browser_action": {
     "default_popup": "popup.html",
-    "default_title": "TubeCourier",
+    "default_title": "TubeCourier for MeTube",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",

@@ -2,7 +2,7 @@
 
   <img src="assets/icon.png" alt="TubeCourier" width="80" height="80">
 
-  <h1>TubeCourier</h1>
+  <h1>TubeCourier for MeTube</h1>
 
   <p><strong>A dedicated, lightweight browser companion extension designed specifically for self-hosted <a href="https://github.com/alexta69/metube">MeTube</a> instances.</strong></p>
 
