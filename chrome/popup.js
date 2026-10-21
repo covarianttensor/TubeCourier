@@ -230,7 +230,7 @@ function updateFoldersUI(customDirs = []) {
   availableDirs = customDirs;
 
   // 1. Populate <datalist> for fast autocomplete search
-  folderDatalist.innerHTML = '';
+  folderDatalist.replaceChildren();
   for (const dir of customDirs) {
     const opt = document.createElement('option');
     opt.value = dir;
@@ -245,7 +245,7 @@ function updateFoldersUI(customDirs = []) {
   }
 
   // Render chips
-  folderChipsRow.innerHTML = '';
+  folderChipsRow.replaceChildren();
 
   // Default root chip
   const defaultChip = document.createElement('button');
@@ -298,9 +298,12 @@ function renderQueueView(queue = [], done = []) {
   }
 
   // Render Active Queue
-  activeQueueList.innerHTML = '';
+  activeQueueList.replaceChildren();
   if (queue.length === 0) {
-    activeQueueList.innerHTML = '<div class="empty-queue-msg">No active downloads in queue</div>';
+    const emptyDiv = document.createElement('div');
+    emptyDiv.className = 'empty-queue-msg';
+    emptyDiv.textContent = 'No active downloads in queue';
+    activeQueueList.appendChild(emptyDiv);
   } else {
     for (const item of queue) {
       const card = document.createElement('div');
@@ -309,27 +312,58 @@ function renderQueueView(queue = [], done = []) {
       const percent = Math.min(100, Math.max(0, item.percent || 0));
       const speedStr = formatSpeed(item.speed);
       const etaStr = formatEta(item.eta);
-      const folderTag = item.folder ? `<span class="queue-folder-tag">📁 /${item.folder}</span>` : '';
 
-      card.innerHTML = `
-        <div class="queue-item-header">
-          <span class="queue-item-title" title="${item.title || item.url}">${item.title || item.url}</span>
-          <button class="btn-cancel-item" data-id="${item.id}" title="Cancel download">&times;</button>
-        </div>
-        <div class="queue-progress-bar-bg">
-          <div class="queue-progress-bar-fill" style="width: ${percent}%;"></div>
-        </div>
-        <div class="queue-item-meta">
-          <span>${percent > 0 ? percent.toFixed(1) + '%' : (item.status || 'Queued')}</span>
-          <span>${speedStr} ${etaStr ? '&bull; ' + etaStr : ''}</span>
-          ${folderTag}
-        </div>
-      `;
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'queue-item-header';
 
-      card.querySelector('.btn-cancel-item').addEventListener('click', async (e) => {
-        const id = e.target.dataset.id;
+      const titleSpan = document.createElement('span');
+      titleSpan.className = 'queue-item-title';
+      const displayTitle = item.title || item.url || '';
+      titleSpan.title = displayTitle;
+      titleSpan.textContent = displayTitle;
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'btn-cancel-item';
+      cancelBtn.dataset.id = item.id;
+      cancelBtn.title = 'Cancel download';
+      cancelBtn.textContent = '×';
+
+      headerDiv.appendChild(titleSpan);
+      headerDiv.appendChild(cancelBtn);
+
+      const progressBg = document.createElement('div');
+      progressBg.className = 'queue-progress-bar-bg';
+      const progressFill = document.createElement('div');
+      progressFill.className = 'queue-progress-bar-fill';
+      progressFill.style.width = `${percent}%`;
+      progressBg.appendChild(progressFill);
+
+      const metaDiv = document.createElement('div');
+      metaDiv.className = 'queue-item-meta';
+
+      const statusSpan = document.createElement('span');
+      statusSpan.textContent = percent > 0 ? percent.toFixed(1) + '%' : (item.status || 'Queued');
+
+      const speedSpan = document.createElement('span');
+      speedSpan.textContent = etaStr ? `${speedStr} • ${etaStr}` : speedStr;
+
+      metaDiv.appendChild(statusSpan);
+      metaDiv.appendChild(speedSpan);
+
+      if (item.folder) {
+        const folderTag = document.createElement('span');
+        folderTag.className = 'queue-folder-tag';
+        folderTag.textContent = `📁 /${item.folder}`;
+        metaDiv.appendChild(folderTag);
+      }
+
+      card.appendChild(headerDiv);
+      card.appendChild(progressBg);
+      card.appendChild(metaDiv);
+
+      cancelBtn.addEventListener('click', async () => {
         card.style.opacity = '0.5';
-        await api.runtime.sendMessage({ action: 'cancelDownload', id });
+        await api.runtime.sendMessage({ action: 'cancelDownload', id: item.id });
         showToast('Download cancelled');
         await syncState();
       });
@@ -339,31 +373,56 @@ function renderQueueView(queue = [], done = []) {
   }
 
   // Render Completed Items
-  completedQueueList.innerHTML = '';
+  completedQueueList.replaceChildren();
   if (done.length === 0) {
-    completedQueueList.innerHTML = '<div class="empty-queue-msg">No completed downloads</div>';
+    const emptyDiv = document.createElement('div');
+    emptyDiv.className = 'empty-queue-msg';
+    emptyDiv.textContent = 'No completed downloads';
+    completedQueueList.appendChild(emptyDiv);
   } else {
     const recentDone = done.slice(0, 10);
     for (const item of recentDone) {
       const card = document.createElement('div');
       card.className = 'queue-item-card';
 
-      const folderTag = item.folder ? `<span class="queue-folder-tag">📁 /${item.folder}</span>` : '';
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'queue-item-header';
 
-      card.innerHTML = `
-        <div class="queue-item-header">
-          <span class="queue-item-title" title="${item.title || item.url}">✓ ${item.title || item.url}</span>
-          <button class="btn-clear-item" data-id="${item.id}" title="Clear from list">&times;</button>
-        </div>
-        <div class="queue-item-meta">
-          <span style="color: #22c55e;">Finished</span>
-          ${folderTag}
-        </div>
-      `;
+      const titleSpan = document.createElement('span');
+      titleSpan.className = 'queue-item-title';
+      const displayTitle = `✓ ${item.title || item.url || ''}`;
+      titleSpan.title = item.title || item.url || '';
+      titleSpan.textContent = displayTitle;
 
-      card.querySelector('.btn-clear-item').addEventListener('click', async (e) => {
-        const id = e.target.dataset.id;
-        await api.runtime.sendMessage({ action: 'clearDownload', id });
+      const clearBtn = document.createElement('button');
+      clearBtn.className = 'btn-clear-item';
+      clearBtn.dataset.id = item.id;
+      clearBtn.title = 'Clear from list';
+      clearBtn.textContent = '×';
+
+      headerDiv.appendChild(titleSpan);
+      headerDiv.appendChild(clearBtn);
+
+      const metaDiv = document.createElement('div');
+      metaDiv.className = 'queue-item-meta';
+
+      const finishedSpan = document.createElement('span');
+      finishedSpan.style.color = '#22c55e';
+      finishedSpan.textContent = 'Finished';
+      metaDiv.appendChild(finishedSpan);
+
+      if (item.folder) {
+        const folderTag = document.createElement('span');
+        folderTag.className = 'queue-folder-tag';
+        folderTag.textContent = `📁 /${item.folder}`;
+        metaDiv.appendChild(folderTag);
+      }
+
+      card.appendChild(headerDiv);
+      card.appendChild(metaDiv);
+
+      clearBtn.addEventListener('click', async () => {
+        await api.runtime.sendMessage({ action: 'clearDownload', id: item.id });
         card.remove();
       });
 
