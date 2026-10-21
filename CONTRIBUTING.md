@@ -42,7 +42,7 @@ python3 package.py
 
 This compiles:
 - `dist/tubecourier-firefox.xpi`: Direct install package for Waterfox / Firefox.
-- `dist/tubecourier-firefox.zip`: Source archive for Mozilla AMO review.
+- `dist/tubecourier-firefox.zip`: Standalone zip archive for Firefox.
 - `dist/tubecourier-chrome.zip`: Packaged archive for Chrome/Chromium.
 
 ---

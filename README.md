@@ -95,11 +95,11 @@ Packages for each browser are automatically built and published with every relea
 2. In Waterfox Mobile, open the menu (⋮) and tap **Add-ons** (or go to `about:addons`).
 3. Tap the gear icon or **Install Add-on From File** and select `tubecourier-firefox.xpi`.
 
-#### Option C: Temporary Developer Install (Standard Firefox)
-1. Clone the repository: `git clone https://github.com/covarianttensor/TubeCourier.git`
+#### Option C: Standard Firefox (Load Unpacked / Temporary)
+1. Download `tubecourier-firefox.zip` from the [Latest Release](https://github.com/covarianttensor/TubeCourier/releases/latest) and extract it.
 2. In standard Firefox, navigate to `about:debugging#/runtime/this-firefox`.
 3. Click **Load Temporary Add-on...**.
-4. Select `firefox/manifest.json`.
+4. Select the `manifest.json` file inside the extracted folder.
 
 ---
 
@@ -186,8 +186,8 @@ python3 package.py
 ```
 
 This compiles:
-- `dist/tubecourier-firefox.xpi`: Direct install file for Firefox & Waterfox.
-- `dist/tubecourier-firefox.zip`: Mozilla Add-on Store (AMO) review package.
+- `dist/tubecourier-firefox.xpi`: Direct install package for Waterfox & Firefox.
+- `dist/tubecourier-firefox.zip`: Zip archive containing the Firefox add-on files.
 - `dist/tubecourier-chrome.zip`: Chrome / Chromium MV3 package.
 
 ---

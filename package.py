@@ -3,8 +3,8 @@
 TubeCourier Multi-Platform Build & Packaging Script
 Packages:
   - dist/tubecourier-firefox.xpi (Installable add-on for Waterfox & Firefox)
-  - dist/tubecourier-firefox.zip (Mozilla AMO store submission archive)
-  - dist/tubecourier-chrome.zip  (Unpacked / developer distribution for Chrome, Brave, Edge)
+  - dist/tubecourier-firefox.zip (Standalone archive for Firefox)
+  - dist/tubecourier-chrome.zip  (Unpacked distribution for Chrome, Brave, Edge)
 """
 
 import os
@@ -71,7 +71,7 @@ def main():
     firefox_xpi = os.path.join(DIST_DIR, "tubecourier-firefox.xpi")
     build_zip(FIREFOX_DIR, FIREFOX_FILES, firefox_xpi)
 
-    print("\n[2/3] Packaging Firefox / Waterfox AMO ZIP:")
+    print("\n[2/3] Packaging Firefox / Waterfox ZIP:")
     firefox_zip = os.path.join(DIST_DIR, "tubecourier-firefox.zip")
     build_zip(FIREFOX_DIR, FIREFOX_FILES, firefox_zip)
 
