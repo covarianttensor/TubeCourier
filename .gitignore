@@ -1,0 +1,24 @@
+# Compiled extension packages
+*.xpi
+*.zip
+
+# Build and distribution directories
+dist/
+build/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Editor configurations
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Logs
+*.log

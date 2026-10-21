@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TubeCourier</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-brand">
+        <img src="icons/icon-32.png" alt="Logo" class="brand-icon">
+        <div class="brand-info">
+          <h1>TubeCourier</h1>
+          <div class="server-status" id="server-status-pill">
+            <span class="status-dot" id="status-dot"></span>
+            <span class="status-text" id="status-text">Connecting...</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-tab-settings" class="btn-icon" title="Server Settings" aria-label="Settings">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" id="tab-btn-download" data-view="download-view">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Download</span>
+      </button>
+      <button class="nav-tab" id="tab-btn-queue" data-view="queue-view">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+        <span>Queue</span>
+        <span class="queue-badge hidden" id="queue-badge">0</span>
+      </button>
+    </nav>
+
+    <!-- VIEW 1: Download Tab -->
+    <main class="view-panel active" id="download-view">
+      <!-- Active Video Card -->
+      <section class="card video-card">
+        <div class="video-preview">
+          <img id="video-thumbnail" src="icons/icon-48.png" alt="Thumbnail" class="video-thumb-img">
+          <div class="video-meta">
+            <h2 id="video-title" class="video-title">Detecting active tab video...</h2>
+            <div class="video-submeta">
+              <span id="video-domain" class="video-domain">---</span>
+              <span id="container-tag" class="tag container-tag hidden">Container</span>
+            </div>
+          </div>
+        </div>
+        <div class="url-input-container">
+          <input type="text" id="target-url-input" placeholder="https://www.youtube.com/watch?v=..." aria-label="Video URL">
+        </div>
+        <div id="url-status-banner" class="url-status-banner hidden">
+          <span class="url-status-icon">⚠️</span>
+          <span id="url-status-text">Navigate to a YouTube video page to queue downloads.</span>
+        </div>
+      </section>
+
+      <!-- Options Form -->
+      <section class="card form-card">
+        <!-- Destination Folder -->
+        <div class="form-group">
+          <div class="form-label-row">
+            <label for="folder-input" class="form-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              Destination Folder:
+            </label>
+            <button id="btn-refresh-dirs" class="btn-link" title="Refresh server folders">Refresh</button>
+          </div>
+
+          <!-- Quick Category Chips -->
+          <div class="folder-chips-row" id="folder-chips-row">
+            <button class="chip active" data-folder="">Default (/downloads)</button>
+            <button class="chip" data-folder="Music">📁 Music</button>
+            <button class="chip" data-folder="Videos">📁 Videos</button>
+            <button class="chip" data-folder="Podcasts">📁 Podcasts</button>
+          </div>
+
+          <!-- Searchable Autocomplete Input with datalist -->
+          <div class="folder-search-container">
+            <input type="text" id="folder-input" list="folder-datalist" class="form-input" placeholder="Type or select a subfolder (e.g. Music, Videos)..." autocomplete="off">
+            <datalist id="folder-datalist">
+              <!-- Folder options dynamically loaded here -->
+            </datalist>
+          </div>
+        </div>
+
+        <!-- Format & Quality Grid -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="type-select" class="form-label">Type:</label>
+            <select id="type-select" class="form-select">
+              <option value="video" selected>Video</option>
+              <option value="audio">Audio Only</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="quality-select" class="form-label">Quality:</label>
+            <select id="quality-select" class="form-select">
+              <option value="best" selected>Best Available</option>
+              <option value="1080">1080p</option>
+              <option value="720">720p</option>
+              <option value="480">480p</option>
+              <option value="manual">Manual / Default</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cookie Sync Checkbox -->
+        <div class="form-checkbox-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="chk-auto-sync-cookies" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">
+              Auto-sync active session cookies
+              <span class="tooltip-hint" title="Uploads cookies for YouTube and protected sites to your server right before downloading.">(?)</span>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Action Button -->
+      <div class="submit-action-row">
+        <button id="btn-start-download" class="btn btn-primary btn-large">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span id="btn-download-label">Download Video</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- VIEW 2: Queue & Progress Tracker Tab -->
+    <main class="view-panel hidden" id="queue-view">
+      <div class="queue-toolbar">
+        <span class="queue-header-title">Active Downloads</span>
+        <button id="btn-refresh-queue" class="btn-icon-sm" title="Reload queue">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Active Queue List -->
+      <div class="queue-list" id="active-queue-list">
+        <!-- Rendered items go here -->
+      </div>
+
+      <!-- Completed Section Header -->
+      <div class="queue-toolbar mt-8">
+        <span class="queue-header-title">Completed Recently</span>
+        <button id="btn-clear-completed" class="btn-link" title="Clear finished list">Clear Finished</button>
+      </div>
+
+      <!-- Completed List -->
+      <div class="queue-list completed-list" id="completed-queue-list">
+        <!-- Rendered completed items go here -->
+      </div>
+    </main>
+
+    <!-- VIEW 3: Settings Panel (Slide-in / Toggle) -->
+    <main class="view-panel hidden" id="settings-view">
+      <div class="settings-header">
+        <h2>Server Settings</h2>
+        <button id="btn-close-settings" class="btn-text">&times;</button>
+      </div>
+
+      <div class="card settings-card">
+        <div class="form-group">
+          <label for="setting-server-url" class="form-label">Backend Server URL:</label>
+          <div class="url-test-row">
+            <input type="text" id="setting-server-url" class="form-input" placeholder="http://localhost:8081">
+            <button id="btn-test-connection" class="btn btn-secondary">Test</button>
+          </div>
+          <p class="form-help">Enter your MeTube server address (e.g. <code>http://localhost:8081</code> or <code>http://192.168.1.100:8081</code>).</p>
+        </div>
+
+        <div class="form-group">
+          <label for="setting-default-folder" class="form-label">Default Subfolder:</label>
+          <input type="text" id="setting-default-folder" class="form-input" placeholder="e.g. Music, Videos, or blank for root">
+        </div>
+
+        <div class="form-checkbox-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="setting-notify-complete" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Show desktop notification when download finishes</span>
+          </label>
+        </div>
+
+        <div class="form-checkbox-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="setting-auto-cookies" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Always auto-sync cookies when sending downloads</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-actions">
+        <button id="btn-save-settings" class="btn btn-primary">Save Settings</button>
+      </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+      <span id="toast-message">Notification message</span>
+    </div>
+  </div>
+
+  <script src="lib/socket.io.min.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

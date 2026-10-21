@@ -1,0 +1,57 @@
+{
+  "manifest_version": 2,
+  "name": "TubeCourier - MeTube Downloader",
+  "version": "1.0.0",
+  "description": "Companion extension specifically designed for MeTube (yt-dlp). Send video downloads with custom subfolder selection, real-time WebSocket progress tracking, cookie sync, and notifications.",
+  "author": "covarianttensor",
+  "homepage_url": "https://github.com/covarianttensor/TubeCourier",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png",
+    "256": "icons/icon-256.png"
+  },
+  "permissions": [
+    "cookies",
+    "tabs",
+    "activeTab",
+    "<all_urls>",
+    "storage",
+    "notifications",
+    "contextMenus",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "background": {
+    "scripts": [
+      "lib/socket.io.min.js",
+      "background.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "TubeCourier",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "96": "icons/icon-96.png",
+      "128": "icons/icon-128.png",
+      "256": "icons/icon-256.png"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "tubecourier@addons.mozilla.org",
+      "strict_min_version": "91.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  }
+}
