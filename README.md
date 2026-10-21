@@ -72,22 +72,23 @@ Packages for each browser are automatically built and published with every relea
 
 ---
 
-### 🦊 Waterfox & Firefox (Desktop & Android)
+### 🦊 Waterfox, Firefox & Gecko Browsers
 
-> [!IMPORTANT]
-> **Extension Verification Policy:**
-> - **Waterfox (Desktop & Android):** By design, Waterfox allows installing unsigned `.xpi` packages directly from a file.
-> - **Standard Firefox Release:** Enforces mandatory signature checks. Attempting to install an unsigned `.xpi` will show: *"This add-on could not be installed because it has not been verified."* Standard Firefox users must either:
->   1. Load temporarily via `about:debugging` (see Option C below), or
->   2. Use **Firefox Developer Edition**, **Nightly**, or **ESR** with `xpinstall.signatures.required` set to `false` in `about:config`, or
->   3. Install the officially signed version once published on Mozilla Add-ons (AMO).
+> [!WARNING]
+> **Standard Firefox Does Not Allow Installing Unverified `.xpi` Files:**  
+> Standard release versions of Firefox **strictly block** installing unverified/unsigned `.xpi` files from disk. If you try to install `tubecourier-firefox.xpi` into standard Firefox via `about:addons` ➔ *Install Add-on From File*, Firefox will display:  
+> *"This add-on could not be installed because it has not been verified."*
+>
+> - **Waterfox (Desktop & Android):** Natively allows installing unsigned `.xpi` packages directly from a file with full permanence (see Option A & B below).
+> - **Firefox Developer Edition / Nightly:** Allows unsigned `.xpi` installs once `xpinstall.signatures.required` is set to `false` in `about:config`.
+> - **Standard Firefox Release:** Must be loaded as a temporary add-on via `about:debugging` (see Option C below), as standard builds do not allow installing unsigned `.xpi` files.
 
-#### Option A: Direct `.xpi` Install (Waterfox & Firefox Dev Edition)
+#### Option A: Direct `.xpi` Install (Waterfox & Firefox Developer Edition)
 1. Download `tubecourier-firefox.xpi` from the [Latest Release](https://github.com/covarianttensor/TubeCourier/releases/latest).
-2. In Waterfox or Firefox Developer Edition, navigate to `about:addons`.
+2. In Waterfox (or Firefox Developer Edition with signatures disabled), navigate to `about:addons`.
 3. Click the **gear icon** (⚙️) in the upper-right corner.
 4. Select **Install Add-on From File...**.
-5. Select the downloaded `tubecourier-firefox.xpi` and confirm permissions.
+5. Select the downloaded `tubecourier-firefox.xpi` and click **Add** to confirm.
 6. The TubeCourier icon will appear in your toolbar!
 
 #### Option B: Waterfox for Android
@@ -95,11 +96,13 @@ Packages for each browser are automatically built and published with every relea
 2. In Waterfox Mobile, open the menu (⋮) and tap **Add-ons** (or go to `about:addons`).
 3. Tap the gear icon or **Install Add-on From File** and select `tubecourier-firefox.xpi`.
 
-#### Option C: Standard Firefox (Load Unpacked / Temporary)
-1. Download `tubecourier-firefox.zip` from the [Latest Release](https://github.com/covarianttensor/TubeCourier/releases/latest) and extract it.
-2. In standard Firefox, navigate to `about:debugging#/runtime/this-firefox`.
-3. Click **Load Temporary Add-on...**.
+#### Option C: Standard Firefox (Load via `about:debugging`)
+*Because standard Firefox blocks unverified `.xpi` installs, use this method to load TubeCourier:*
+1. Download `tubecourier-firefox.zip` from the [Latest Release](https://github.com/covarianttensor/TubeCourier/releases/latest) and extract it to a folder.
+2. In Firefox, enter `about:debugging#/runtime/this-firefox` in the address bar.
+3. Click the **Load Temporary Add-on...** button.
 4. Select the `manifest.json` file inside the extracted folder.
+5. TubeCourier will now appear in your browser toolbar!
 
 ---
 
